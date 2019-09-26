@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AzureDevops.Views.PipelinesPage"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:local="clr-namespace:AzureDevops"
+             xmlns:converters="clr-namespace:AzureDevops.Support.Converters"
+             xmlns:b="http://prismlibrary.com"
+             mc:Ignorable="d"
+             IconImageSource="azpipelines.png"
+             Style="{StaticResource DefaultPage}"
+             Padding="0">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:DateTimeToTextConverter x:Key="DateTimeToTextConverter" />
+            <converters:TimeSpanToTextConverter x:Key="TimeSpanToTextConverter" />
+            <converters:StatusToColorConverter x:Key="StatusToColorConverter" />
+            <converters:ItemTappedEventArgsConverter x:Key="itemTappedEventArgsConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="queue"
+                     Text="{x:Static local:Constants.LABEL_QUEUE}"
+                     Order="Primary"
+                     Command="{Binding QueueBuildCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <StackLayout x:Name="container"
+                 VerticalOptions="FillAndExpand">
+        <Grid Padding="5,5,5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition  Height="Auto" />
+                <RowDefinition  Height="*" />
+            </Grid.RowDefinitions>
+
+            <Picker x:Name="definitions"
+                    Grid.Row="0"
+                    Visual="Default"
+                    HorizontalOptions="FillAndExpand"
+                    Title="{x:Static local:Constants.LABEL_BUILD_DEFINITIONS}"
+                    SelectedItem="{Binding Definition}"
+                    ItemsSource="{Binding Definitions}"
+                    ItemDisplayBinding="{Binding Name}">
+                <Picker.Behaviors>
+                    <b:EventToCommandBehavior EventName="SelectedIndexChanged"
+                                              Command="{Binding RefreshBuildsCommand}" />
+                </Picker.Behaviors>
+            </Picker>
+            <ListView x:Name="builds"
+                      Grid.Row="1"
+                      HasUnevenRows="True"
+                      CachingStrategy="RecycleElementAndDataTemplate"
+                      IsPullToRefreshEnabled="True"
+                      SelectionMode="None"
+                      RefreshCommand="{Binding RefreshBuildsCommand}"
+                      IsRefreshing="{Binding IsBusy}"
+                      ItemsSource="{Binding Builds}">
+                <ListView.Behaviors>
+                    <b:EventToCommandBehavior EventName="ItemTapped"
+                                              EventArgsParameterPath="Item"
+                                              Command="{Binding ShowBuildDetailsCommand}"
+                                              EventArgsConverter="{StaticResource itemTappedEventArgsConverter}" />
+                </ListView.Behaviors>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="20" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="5" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="15" />
+                                    <ColumnDefinition Width="65" />
+                                </Grid.ColumnDefinitions>
+
+                                <BoxView Grid.Row="0"
+                                         Grid.Column="0"
+                                         Grid.RowSpan="2"
+                                         VerticalOptions="FillAndExpand"
+                                         HorizontalOptions="FillAndExpand"
+                                         BackgroundColor="{Binding Result, Converter={StaticResource StatusToColorConverter}}" />
+
+                                <Label Grid.Column="1"
+                                       Grid.Row="0"
+                                       TextColor="{StaticResource Preto}"
+                                       FontAttributes="Bold"
+                                       Text="{Binding BuildNumber}" />
+                                <Label Grid.Column="1"
+                                       Grid.Row="1"
+                                       Text="{Binding BuildSourceInfo}" />
+
+                                <Label Grid.Column="2"
+                                       Grid.Row="0"
+                                       VerticalOptions="CenterAndExpand"
+                                       VerticalTextAlignment="Center"
+                                       Text="&#xf073;"
+                                       TextColor="{StaticResource Preto}"
+                                       FontFamily="{StaticResource FontAwesomeSolid}" />
+                                <Label Grid.Column="3"
+                                       Grid.Row="0"
+                                       FontSize="Micro"
+                                       VerticalOptions="CenterAndExpand"
+                                       VerticalTextAlignment="Center"
+                                       TextColor="{StaticResource Preto}"
+                                       Text="{Binding StartTime, Converter={StaticResource DateTimeToTextConverter}}" />
+                                <Label Grid.Column="2"
+                                       Grid.Row="1"
+                                       VerticalOptions="CenterAndExpand"
+                                       VerticalTextAlignment="Center"
+                                       Text="&#xf017;"
+                                       TextColor="{StaticResource Preto}"
+                                       FontFamily="{StaticResource FontAwesomeSolid}" />
+                                <Label Grid.Column="3"
+                                       Grid.Row="1"
+                                       FontSize="Micro"
+                                       VerticalOptions="CenterAndExpand"
+                                       VerticalTextAlignment="Center"
+                                       TextColor="{StaticResource Preto}"
+                                       Text="{Binding Duration, Converter={StaticResource TimeSpanToTextConverter}}" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </StackLayout>
+
+</ContentPage>

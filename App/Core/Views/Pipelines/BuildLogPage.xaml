@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             mc:Ignorable="d"
+             BackgroundColor="{StaticResource Preto}"
+             x:Class="AzureDevops.Views.BuildLogPage">
+    <ListView Margin="5"
+              ItemsSource="{Binding Logs}"
+              HasUnevenRows="True"
+              RowHeight="15"
+              SelectionMode="None"
+              SeparatorVisibility="None"
+              CachingStrategy="RecycleElementAndDataTemplate"
+              BackgroundColor="{StaticResource Preto}">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <Label Text="{Binding .}"
+                           FontSize="Micro"
+                           TextColor="{StaticResource Branco}" />
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</ContentPage>

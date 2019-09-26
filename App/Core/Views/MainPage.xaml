@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+            xmlns:local="clr-namespace:AzureDevops"
+            xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+            xmlns:views="clr-namespace:AzureDevops.Views"
+            prism:ViewModelLocator.AutowireViewModel="True"
+            android:TabbedPage.ToolbarPlacement="Bottom"
+            android:TabbedPage.IsSwipePagingEnabled="False"
+            android:TabbedPage.IsSmoothScrollEnabled="True"
+            BarBackgroundColor="#0078D4"
+            BarTextColor="#FFFFFF"
+            SelectedTabColor="#FFFFFF"
+            UnselectedTabColor="#CCCCCC"
+            x:Class="AzureDevops.Views.MainPage"
+            Style="{StaticResource DefaultPage}"
+            Title="{x:Static local:Constants.LABEL_AZURE_DEVOPS}">
+    <TabbedPage.Children>
+        <views:PipelinesPage />
+        <views:ReposPage />
+        <views:TestPage />
+    </TabbedPage.Children>
+</TabbedPage>

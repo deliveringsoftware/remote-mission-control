@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AzureDevops.Views.PersonalAccessTokenLoginPage"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             NavigationPage.HasNavigationBar="False"
+             xmlns:local="clr-namespace:AzureDevops"
+             Style="{StaticResource DefaultPage}"
+             Padding="20">
+
+    <Grid Padding="20"
+          RowSpacing="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+
+        <Image Grid.Row="0"
+               Source="logo.png" />
+
+        <StackLayout Grid.Row="1">
+            <Label Text="{x:Static local:Constants.LABEL_ORGANIZATION}" />
+            <Entry Text="{Binding Organization}" />
+        </StackLayout>
+
+        <StackLayout Grid.Row="2">
+            <Label Text="{x:Static local:Constants.LABEL_PERSONAL_ACCESS_TOKEN}" />
+            <Entry IsPassword="True"
+                   Text="{Binding PersonalAccessToken}" />
+        </StackLayout>
+
+        <Button Grid.Row="3"
+                Text="{x:Static local:Constants.LABEL_LOGIN}"
+                BackgroundColor="{StaticResource Azul}"
+                Command="{Binding LoginCommand}" />
+
+        <Label Grid.Row="4"
+               HorizontalTextAlignment="Center"
+               TextColor="{StaticResource Azul}"
+               TextDecorations="Underline"
+               BackgroundColor="{StaticResource Branco}"
+               Text="Authenticate access with personal access tokens">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding OpenUrlCommand}" />
+            </Label.GestureRecognizers>
+        </Label>
+    </Grid>
+
+</ContentPage>
