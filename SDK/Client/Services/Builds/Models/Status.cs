@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace AzureDevops.Client.Services.Builds.Models
+﻿namespace AzureDevops.Client.Services.Builds.Models
 {
     public enum Status
     {
@@ -13,4 +11,3 @@ namespace AzureDevops.Client.Services.Builds.Models
         Postponed
     }
 }
-

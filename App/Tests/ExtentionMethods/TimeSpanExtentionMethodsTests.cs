@@ -1,6 +1,6 @@
-﻿using System;
+﻿using AzureDevops.Support.ExtentionMethods;
+using System;
 using Xunit;
-using AzureDevops.Support.ExtentionMethods;
 
 namespace AzureDevops.Tests.ExtentionMethods
 {

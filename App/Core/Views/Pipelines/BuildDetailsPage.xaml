@@ -183,6 +183,5 @@
                 </ListView.ItemTemplate>
             </ListView>
         </StackLayout>
-
     </StackLayout>
 </ContentPage>

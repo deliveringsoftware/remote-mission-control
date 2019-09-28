@@ -6,13 +6,9 @@ using AzureDevops.Views;
 using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.Forms;
 
 namespace AzureDevops.ViewModels.Pipelines
 {
@@ -34,6 +30,7 @@ namespace AzureDevops.ViewModels.Pipelines
         }
 
         private Build build;
+
         public Build Build
         {
             get => build;
@@ -41,6 +38,7 @@ namespace AzureDevops.ViewModels.Pipelines
         }
 
         private Project project;
+
         public Project Project
         {
             get => project;
@@ -48,6 +46,7 @@ namespace AzureDevops.ViewModels.Pipelines
         }
 
         private ObservableCollection<Job> jobs = new ObservableCollection<Job>();
+
         public ObservableCollection<Job> Jobs
         {
             get => jobs;
@@ -99,14 +98,12 @@ namespace AzureDevops.ViewModels.Pipelines
                     if (result.HasError)
                         dialogService.ShowToast($"Error... {result.ErrorDescription}");
 
-
                     var navigationParameters = new NavigationParameters
                     {
                         { $"{nameof(Log)}", result.Data.Value },
                     };
 
                     await navigationService.NavigateAsync($"{nameof(BuildLogPage)}", navigationParameters, true);
-
                 }, Constants.LABEL_LOADING, "BuildDetailsPageViewModel.ShowLogs");
             }
         }

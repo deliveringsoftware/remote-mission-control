@@ -1,7 +1,7 @@
-﻿using System;
+﻿using AzureDevops.Support.ExtentionMethods;
+using System;
 using System.Globalization;
 using Xamarin.Forms;
-using AzureDevops.Support.ExtentionMethods;
 
 namespace AzureDevops.Support.Converters
 {

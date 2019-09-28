@@ -10,7 +10,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.Forms;
 
 namespace AzureDevops.ViewModels.Pipelines
 {
@@ -40,6 +39,7 @@ namespace AzureDevops.ViewModels.Pipelines
         }
 
         private Definition definition;
+
         public Definition Definition
         {
             get => definition;
@@ -47,6 +47,7 @@ namespace AzureDevops.ViewModels.Pipelines
         }
 
         private Project project;
+
         public Project Project
         {
             get => project;
@@ -54,6 +55,7 @@ namespace AzureDevops.ViewModels.Pipelines
         }
 
         private ObservableCollection<Definition> definitions = new ObservableCollection<Definition>();
+
         public ObservableCollection<Definition> Definitions
         {
             get => definitions;
@@ -61,6 +63,7 @@ namespace AzureDevops.ViewModels.Pipelines
         }
 
         private ObservableCollection<Build> builds = new ObservableCollection<Build>();
+
         public ObservableCollection<Build> Builds
         {
             get => builds;
@@ -70,7 +73,6 @@ namespace AzureDevops.ViewModels.Pipelines
         public ICommand RefreshBuildsCommand { get; }
         public ICommand QueueBuildCommand { get; }
         public ICommand ShowBuildDetailsCommand { get; }
-
 
         public override async Task InitializeAsync(INavigationParameters parameters)
         {
@@ -127,7 +129,6 @@ namespace AzureDevops.ViewModels.Pipelines
                 Builds = new ObservableCollection<Build>(result.Data.Value);
             }
         }
-
 
         private async Task ShowBuildDetails(Build build)
         {

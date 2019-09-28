@@ -12,6 +12,7 @@ namespace AzureDevops.Client
     internal class AzureDevopsClient : IAzureDevopsClient
     {
         private IProjects _projects;
+
         public IProjects Projects
         {
             get
@@ -23,6 +24,7 @@ namespace AzureDevops.Client
         }
 
         private IBuilds _builds;
+
         public IBuilds Builds
         {
             get
@@ -34,6 +36,7 @@ namespace AzureDevops.Client
         }
 
         private IDefinitions _definitions;
+
         public IDefinitions Definitions
         {
             get
@@ -46,6 +49,7 @@ namespace AzureDevops.Client
 
         private readonly HttpClient _httpClient;
         private readonly AsyncRetryPolicy _asyncRetryPolicy;
+
         public AzureDevopsClient(HttpClient httpClient, RetryPolicyConfiguration retryPolicyConfiguration)
         {
             this._httpClient = httpClient;

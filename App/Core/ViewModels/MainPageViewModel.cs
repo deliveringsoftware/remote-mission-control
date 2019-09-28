@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using AzureDevops.Services;
+﻿using AzureDevops.Services;
 using Prism.Navigation;
 using Prism.Services;
+using System.Threading.Tasks;
 
 namespace AzureDevops.ViewModels
 {

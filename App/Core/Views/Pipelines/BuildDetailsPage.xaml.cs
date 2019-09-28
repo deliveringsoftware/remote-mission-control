@@ -1,5 +1,4 @@
-﻿using AzureDevops.ViewModels.Pipelines;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace AzureDevops.Views
 {

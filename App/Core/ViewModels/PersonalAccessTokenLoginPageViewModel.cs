@@ -1,22 +1,17 @@
-﻿using AzureDevops.Client.Services.Projects.Models;
-using AzureDevops.Services;
+﻿using AzureDevops.Services;
 using AzureDevops.Views;
 using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace AzureDevops.ViewModels
 {
     public class PersonalAccessTokenLoginPageViewModel : BaseViewModel
     {
-
         private readonly IAzureDevopsClientService azureDevopsClientService;
 
         private string _organization;
@@ -54,7 +49,6 @@ namespace AzureDevops.ViewModels
         public ICommand LoginCommand { get; }
         public ICommand OpenUrlCommand { get; }
 
-
         private async Task Login()
         {
             await ExecuteTask(async () =>
@@ -69,7 +63,6 @@ namespace AzureDevops.ViewModels
                 {
                     await NavigateToProjectsPage();
                 }
-
             }, Constants.LABEL_LOADING, "PersonalAccessTokenLoginViewModel.Login");
         }
 

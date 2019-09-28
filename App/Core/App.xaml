@@ -50,6 +50,5 @@
             <Setter Property="Title"
                     Value="{Binding Title}" />
         </Style>
-
     </Application.Resources>
 </prism:PrismApplication>

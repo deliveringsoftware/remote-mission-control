@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AzureDevops.Services;
+﻿using AzureDevops.Services;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AzureDevops.ViewModels
 {
@@ -22,7 +22,6 @@ namespace AzureDevops.ViewModels
            , IDialogService dialogService
            , ITrackService trackService)
         {
-
             this.navigationService = navigationService;
             this.pageDialogService = pageDialogService;
             this.dialogService = dialogService;
@@ -30,6 +29,7 @@ namespace AzureDevops.ViewModels
         }
 
         private bool isBusy;
+
         public bool IsBusy
         {
             get => isBusy;
@@ -39,12 +39,12 @@ namespace AzureDevops.ViewModels
         public bool IsNotBusy => !IsBusy;
 
         private string title = string.Empty;
+
         public string Title
         {
             get { return title; }
             set { SetProperty(ref title, value); }
         }
-
 
         public async Task Loading()
         {
@@ -60,6 +60,7 @@ namespace AzureDevops.ViewModels
         }
 
         protected virtual Task OnLoading() => Task.CompletedTask;
+
         protected virtual Task OnUnloading() => Task.CompletedTask;
 
         protected async Task ExecuteTask(Func<Task> task,
@@ -67,7 +68,6 @@ namespace AzureDevops.ViewModels
                                          string eventName = "",
                                          IDictionary<string, string> properties = null)
         {
-
             await Task.CompletedTask;
 
             await dialogService.ShowLoading(text, async () =>
@@ -100,6 +100,5 @@ namespace AzureDevops.ViewModels
 
         public virtual Task InitializeAsync(INavigationParameters parameters)
             => Task.CompletedTask;
-
     }
 }

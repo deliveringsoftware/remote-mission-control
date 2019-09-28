@@ -1,6 +1,6 @@
-﻿using System;
+﻿using AzureDevops.Support.Converters;
+using System;
 using Xunit;
-using AzureDevops.Support.Converters;
 
 namespace AzureDevops.Tests.Converters
 {

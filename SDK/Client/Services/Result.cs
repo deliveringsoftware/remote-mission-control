@@ -11,7 +11,9 @@
             this.ErrorDescription = errorDescription;
         }
 
-        public Result() { }
+        public Result()
+        {
+        }
     }
 
     public class Result<T> : Result
@@ -24,6 +26,8 @@
         public Result(bool hasError, string errorDescription)
             : base(hasError, errorDescription) { }
 
-        public Result() { }
+        public Result()
+        {
+        }
     }
 }

@@ -1,5 +1,5 @@
-﻿using System;
-using Acr.UserDialogs;
+﻿using Acr.UserDialogs;
+using System;
 using System.Threading.Tasks;
 
 namespace AzureDevops.Services

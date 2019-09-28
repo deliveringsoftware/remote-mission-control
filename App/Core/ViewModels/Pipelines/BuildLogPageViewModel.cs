@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using AzureDevops.Client.Services.Builds.Models;
+﻿using AzureDevops.Client.Services.Builds.Models;
 using AzureDevops.Services;
 using Prism.Navigation;
 using Prism.Services;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace AzureDevops.ViewModels.Pipelines
 {
@@ -16,10 +16,10 @@ namespace AzureDevops.ViewModels.Pipelines
             , ITrackService trackService)
             : base(navigationService, pageDialogService, dialogService, trackService)
         {
-
         }
 
         private ObservableCollection<string> logs = new ObservableCollection<string>();
+
         public ObservableCollection<string> Logs
         {
             get => logs;

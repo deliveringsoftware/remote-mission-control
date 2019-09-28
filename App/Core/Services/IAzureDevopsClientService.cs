@@ -1,12 +1,11 @@
-﻿using System;
-using AzureDevops.Client;
+﻿using AzureDevops.Client;
 
 namespace AzureDevops.Services
 {
-	public interface IAzureDevopsClientService
-	{
-		IAzureDevopsClient Client { get; }
+    public interface IAzureDevopsClientService
+    {
+        IAzureDevopsClient Client { get; }
 
-		void RegisterAzureDevopsClient(string organization, string personalAccessToken);
-	}
+        void RegisterAzureDevopsClient(string organization, string personalAccessToken);
+    }
 }

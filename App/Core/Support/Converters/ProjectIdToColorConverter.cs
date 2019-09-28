@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Xamarin.Forms;
 
 namespace AzureDevops.Support.Converters

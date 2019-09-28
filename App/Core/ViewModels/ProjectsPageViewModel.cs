@@ -41,8 +41,8 @@ namespace AzureDevops.ViewModels
                 navigationParameters);
         }
 
-
         private ObservableCollection<Project> projects = new ObservableCollection<Project>();
+
         public ObservableCollection<Project> Projects
         {
             get => projects;
@@ -50,7 +50,6 @@ namespace AzureDevops.ViewModels
         }
 
         public ICommand LoadProjectFeaturesCommand { get; }
-
 
         public override async Task InitializeAsync(INavigationParameters parameters)
         {
@@ -63,7 +62,6 @@ namespace AzureDevops.ViewModels
 
                 var projects = result.Data.Value.OrderBy(p => p.Name);
                 Projects = new ObservableCollection<Project>(projects);
-
             }, Constants.LABEL_LOADING, "ProjectsPageViewModel.InitializeAsync");
         }
     }

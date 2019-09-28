@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using AzureDevops.Client.Services.Projects.Models;
+﻿using AzureDevops.Client.Services.Projects.Models;
 using AzureDevops.Services;
 using Prism.Navigation;
 using Prism.Services;
+using System.Threading.Tasks;
 
 namespace AzureDevops.ViewModels.Repos
 {
@@ -18,6 +18,7 @@ namespace AzureDevops.ViewModels.Repos
         }
 
         private Project project;
+
         public Project Project
         {
             get => project;

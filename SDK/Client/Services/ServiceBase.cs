@@ -11,6 +11,7 @@ namespace AzureDevops.Client.Services
     {
         private readonly HttpClient _httpClient;
         private readonly AsyncRetryPolicy _asyncRetryPolicy;
+
         public ServiceBase(HttpClient httpClient, AsyncRetryPolicy asyncRetryPolicy)
         {
             this._httpClient = httpClient;

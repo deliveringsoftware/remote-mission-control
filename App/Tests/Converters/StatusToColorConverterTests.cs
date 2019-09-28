@@ -1,8 +1,8 @@
-﻿using System;
-using Xunit;
+﻿using AzureDevops.Client.Services.Builds.Models;
 using AzureDevops.Support.Converters;
-using AzureDevops.Client.Services.Builds.Models;
+using System;
 using Xamarin.Forms;
+using Xunit;
 
 namespace AzureDevops.Tests.Converters
 {

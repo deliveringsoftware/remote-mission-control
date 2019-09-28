@@ -13,7 +13,7 @@ namespace AzureDevops.Support.Converters
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
 
-            if(!(value is Result) && !(value is TaskResult))
+            if (!(value is Result) && !(value is TaskResult))
                 throw new ArgumentException("Invalid value type");
 
             var colors = new Dictionary<string, Color>
