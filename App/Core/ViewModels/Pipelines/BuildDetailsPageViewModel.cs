@@ -27,6 +27,8 @@ namespace AzureDevops.ViewModels.Pipelines
                 .ObservesCanExecute(() => IsNotBusy);
 
             this.azureDevopsClientService = azureDevopsClientService;
+
+            this.RefreshJobsCommand = new DelegateCommand(async () => await LoadTimeline());
         }
 
         private Build build;
@@ -45,6 +47,8 @@ namespace AzureDevops.ViewModels.Pipelines
             set => SetProperty(ref project, value);
         }
 
+        public DelegateCommand RefreshJobsCommand { get; }
+
         private ObservableCollection<Job> jobs = new ObservableCollection<Job>();
 
         public ObservableCollection<Job> Jobs
@@ -57,10 +61,10 @@ namespace AzureDevops.ViewModels.Pipelines
 
         public override async Task InitializeAsync(INavigationParameters parameters)
         {
+            trackService.Event("BuildDetailsPageViewModel.InitializeAsync");
+
             var projectKey = $"{nameof(Project)}";
             var buildKey = $"{nameof(Build)}";
-
-            trackService.Event("BuildDetailsPageViewModel.InitializeAsync");
 
             if (parameters.ContainsKey(projectKey) && parameters.ContainsKey(buildKey))
             {
@@ -69,44 +73,63 @@ namespace AzureDevops.ViewModels.Pipelines
 
                 Title = string.Format(Constants.LABEL_BUILD_VERSION, Build.BuildNumber);
 
-                await ExecuteTask(async () => await LoadTimeline());
+                await LoadTimeline();
             }
         }
 
         private async Task LoadTimeline()
         {
-            var result = await azureDevopsClientService.Client.Builds.GetTimeline(Project.Name, Build.Id);
+            trackService.Event("BuildDetailsPageViewModel.LoadTimeline");
 
-            if (result.HasError)
-                dialogService.ShowToast($"Error... {result.ErrorDescription}");
+            await ExecuteTask(async () => {
 
-            //TODO  we should display a message?
-            if (result.Data is null) return;
+                var result = await azureDevopsClientService.Client.Builds.GetTimeline(Project.Name, Build.Id);
 
-            Jobs = new ObservableCollection<Job>(Job.CreateJobs(result.Data.Records));
+                if (!result.HasError)
+                {
+                    if (result.Data is null)
+                    {
+                        dialogService.ShowToast(Constants.ERROR_MSG_NO_BUILDS_LOGS);
+                    }
+                    else
+                    {
+                        Jobs = new ObservableCollection<Job>(Job.CreateJobs(result.Data.Records));
+                    }
+                }
+                else
+                {
+                    dialogService.ShowToast(Constants.ERROR_MSG_UNABLE_TO_LOAD_JOBS);
+                }
+            });
         }
 
         private async Task ShowLogs(Job job)
         {
             trackService.Event("BuildDetailsPageViewModel.ShowLogs");
 
-            if (job.LogId.HasValue)
+            if (!job.LogId.HasValue)
             {
-                await ExecuteTask(async () =>
+                return;
+            }
+
+            await ExecuteTask(async () =>
+            {
+                var result = await azureDevopsClientService.Client.Builds.GetLogs(Project.Name, Build.Id, job.LogId.Value);
+
+                if (!result.HasError)
                 {
-                    var result = await azureDevopsClientService.Client.Builds.GetLogs(Project.Name, Build.Id, job.LogId.Value);
-
-                    if (result.HasError)
-                        dialogService.ShowToast($"Error... {result.ErrorDescription}");
-
                     var navigationParameters = new NavigationParameters
                     {
                         { $"{nameof(Log)}", result.Data.Value },
                     };
 
                     await navigationService.NavigateAsync($"{nameof(BuildLogPage)}", navigationParameters, true);
-                });
-            }
+                }
+                else
+                {
+                    dialogService.ShowToast(Constants.ERROR_MSG_UNABLE_TO_LOAD_LOGS);
+                }
+            });
         }
     }
 }

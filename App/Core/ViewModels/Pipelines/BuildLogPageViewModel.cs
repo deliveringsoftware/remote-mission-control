@@ -26,9 +26,11 @@ namespace AzureDevops.ViewModels.Pipelines
             set => SetProperty(ref logs, value);
         }
 
-        public override async Task InitializeAsync(INavigationParameters parameters)
+        public override Task InitializeAsync(INavigationParameters parameters)
         {
             var logKey = $"{nameof(Log)}";
+
+            trackService.Event("BuildLogPageViewModel.InitializeAsync");
 
             if (parameters.ContainsKey(logKey))
             {
@@ -36,7 +38,7 @@ namespace AzureDevops.ViewModels.Pipelines
                 Logs = new ObservableCollection<string>(theLogs);
             }
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
     }
 }

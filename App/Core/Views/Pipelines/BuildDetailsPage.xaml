@@ -132,6 +132,9 @@
             <ListView x:Name="jobs"
                       CachingStrategy="RecycleElementAndDataTemplate"
                       ItemsSource="{Binding Jobs}"
+                      IsPullToRefreshEnabled="True"
+                      RefreshCommand="{Binding RefreshJobsCommand}"
+                      IsRefreshing="{Binding IsBusy}"
                       SelectionMode="None"
                       HasUnevenRows="True">
                 <ListView.Behaviors>

@@ -51,7 +51,11 @@ namespace AzureDevops.ViewModels
             trackService.Event("ProjectsPageViewModel.InitializeAsync");
 
             var projects = parameters["Projects"] as IEnumerable<Project>;
-            Projects = new ObservableCollection<Project>(projects);
+            
+            if (projects != null)
+            {
+                Projects = new ObservableCollection<Project>(projects);
+            }
 
             return Task.CompletedTask;
         }

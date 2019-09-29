@@ -49,9 +49,6 @@ namespace AzureDevops.ViewModels
             {
                 try
                 {
-                    if (isBusy)
-                        return;
-
                     IsBusy = true;
 
                     await task();

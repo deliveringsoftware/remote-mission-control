@@ -23,6 +23,13 @@
         public static string LABEL_BUILD_VERSION = "Build {0}";
 
         public static string ERROR_MSG_PAT_UNABLE_TO_CONNECT_TO_AZURE_DEVOPS = "Unable to connect to Azure DevOps with these informations";
+        public static string ERROR_MSG_UNABLE_TO_QUEUE_A_BUILD = "Unable to queue a build";
+        public static string ERROR_MSG_UNABLE_TO_LOAD_BUILD_DEFINITIONS = "Unable to load build definitions";
+        public static string ERROR_MSG_UNABLE_TO_LOAD_BUILDS = "Unable to load builds";
+        public static string ERROR_MSG_UNABLE_TO_LOAD_JOBS = "Unable to load jobs";
+        public static string ERROR_MSG_UNABLE_TO_LOAD_LOGS = "Unable to load logs";
+        public static string ERROR_MSG_NO_BUILDS_LOGS = "No logs were generated for the running build";
+
 
         public static string URL_PERSONAL_ACCESS_TOKEN = "https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops";
     }

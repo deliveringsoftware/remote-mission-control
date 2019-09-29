@@ -5,6 +5,7 @@ using Prism.Navigation;
 using Prism.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -72,7 +73,7 @@ namespace AzureDevops.ViewModels
 
                 if (!result.HasError)
                 {
-                    await NavigateToProjectsPage(result.Data.Value);
+                    await NavigateToProjectsPage(result.Data.Value.OrderByDescending(p => p.LastUpdateTime));
                 }
                 else
                 {

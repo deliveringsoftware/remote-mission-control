@@ -84,53 +84,64 @@ namespace AzureDevops.ViewModels.Pipelines
             {
                 Project = parameters[projectKey] as Project;
 
-                await ExecuteTask(async () => await LoadDefinitions());
+                await ExecuteTask(async () => await LoadBuildDefinitions());
             }
         }
 
         private async Task RefreshBuilds()
         {
             trackService.Event("PipelinesViewModel.RefreshBuilds");
+
             await ExecuteTask(async () => await LoadBuilds());
         }
 
         private async Task QueueBuild()
         {
-            trackService.Event("PipelinesViewModel.QueueBuil");
+            trackService.Event("PipelinesViewModel.QueueBuild");
 
             await ExecuteTask(async () =>
             {
                 var result = await azureDevopsClientService.Client.Builds.Queue(Definition);
-                if (result.HasError)
-                    dialogService.ShowToast($"Error... {result.ErrorDescription}");
-                else
+
+                if (!result.HasError)
+                {
                     Builds.Insert(0, result.Data);
+                }
+                else
+                {
+                    dialogService.ShowToast(Constants.ERROR_MSG_UNABLE_TO_QUEUE_A_BUILD);
+                }
             });
         }
 
-        private async Task LoadDefinitions()
+        private async Task LoadBuildDefinitions()
         {
             var result = await azureDevopsClientService.Client.Definitions.ListAll(Project.Name);
 
-            if (result.HasError)
-                dialogService.ShowToast($"Error... {result.ErrorDescription}");
-            else
+            if (!result.HasError)
             {
                 Definitions = new ObservableCollection<Definition>(result.Data.Value.OrderByDescending(d => d.Id));
                 Definition = Definitions.FirstOrDefault();
 
                 await LoadBuilds();
             }
+            else
+            {
+                dialogService.ShowToast(Constants.ERROR_MSG_UNABLE_TO_LOAD_BUILD_DEFINITIONS);
+            }
         }
 
         private async Task LoadBuilds()
         {
             var result = await azureDevopsClientService.Client.Builds.ListAll(Project.Name, Definition?.Id);
-            if (result.HasError)
-                dialogService.ShowToast($"Error... {result.ErrorDescription}");
-            else
+
+            if (!result.HasError)
             {
                 Builds = new ObservableCollection<Build>(result.Data.Value);
+            }
+            else
+            {
+                dialogService.ShowToast(Constants.ERROR_MSG_UNABLE_TO_LOAD_BUILDS);
             }
         }
 
