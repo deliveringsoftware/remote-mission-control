@@ -4,6 +4,7 @@ using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -71,7 +72,7 @@ namespace AzureDevops.ViewModels
 
                 if (!result.HasError)
                 {
-                    await NavigateToProjectsPage();
+                    await NavigateToProjectsPage(result.Data.Value);
                 }
                 else
                 {
@@ -80,8 +81,12 @@ namespace AzureDevops.ViewModels
             });
         }
 
-        private Task NavigateToProjectsPage()
-            => navigationService.NavigateAsync($"../{nameof(ProjectsPage)}");
+        private async Task NavigateToProjectsPage(IEnumerable<Client.Services.Projects.Models.Project> projects)
+        {
+            var parameters = new NavigationParameters();
+            parameters.Add("Projects", projects);
+            await navigationService.NavigateAsync($"../{nameof(ProjectsPage)}", parameters);
+        }
 
         private Task OpenUrl()
             => Browser.OpenAsync(new Uri(Constants.URL_PERSONAL_ACCESS_TOKEN), BrowserLaunchMode.SystemPreferred);

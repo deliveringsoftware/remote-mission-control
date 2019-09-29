@@ -4,8 +4,8 @@ using AzureDevops.Views;
 using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -13,18 +13,13 @@ namespace AzureDevops.ViewModels
 {
     public class ProjectsPageViewModel : BaseViewModel
     {
-        private readonly IAzureDevopsClientService azureDevopsClientService;
-
         public ProjectsPageViewModel(INavigationService navigationService
             , IPageDialogService pageDialogService
             , IDialogService dialogService
-            , ITrackService trackService
-            , IAzureDevopsClientService azureDevopsClientService)
+            , ITrackService trackService)
             : base(navigationService, pageDialogService, dialogService, trackService)
         {
             Title = Constants.LABEL_PROJECTS;
-
-            this.azureDevopsClientService = azureDevopsClientService;
 
             LoadProjectFeaturesCommand = new DelegateCommand<Project>(async (project) => await LoadProjectFeatures(project))
                 .ObservesCanExecute(() => IsNotBusy);
@@ -51,20 +46,14 @@ namespace AzureDevops.ViewModels
 
         public ICommand LoadProjectFeaturesCommand { get; }
 
-        public override async Task InitializeAsync(INavigationParameters parameters)
+        public override Task InitializeAsync(INavigationParameters parameters)
         {
             trackService.Event("ProjectsPageViewModel.InitializeAsync");
 
-            await ExecuteTask(async () =>
-            {
-                var result = await azureDevopsClientService.Client.Projects.ListAll();
+            var projects = parameters["Projects"] as IEnumerable<Project>;
+            Projects = new ObservableCollection<Project>(projects);
 
-                if (result.HasError)
-                    dialogService.ShowToast($"Error... {result.ErrorDescription}");
-
-                var projects = result.Data.Value.OrderBy(p => p.Name);
-                Projects = new ObservableCollection<Project>(projects);
-            });
+            return Task.CompletedTask;
         }
     }
 }
