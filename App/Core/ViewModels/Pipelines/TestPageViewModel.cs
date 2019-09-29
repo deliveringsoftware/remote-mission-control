@@ -8,12 +8,9 @@ namespace AzureDevops.ViewModels.Pipelines
 {
     public class TestPageViewModel : BaseViewModel
     {
-        private readonly Project _project;
-
         public TestPageViewModel(INavigationService navigationService
             , IPageDialogService pageDialogService
-            , IDialogService dialogService, ITrackService trackService
-            , Project project)
+            , IDialogService dialogService, ITrackService trackService)
             : base(navigationService, pageDialogService, dialogService, trackService)
         {
             Title = Constants.LABEL_TESTS;
@@ -27,7 +24,7 @@ namespace AzureDevops.ViewModels.Pipelines
             set => SetProperty(ref project, value);
         }
 
-        public override async Task InitializeAsync(INavigationParameters parameters)
+        public override Task InitializeAsync(INavigationParameters parameters)
         {
             var projectKey = $"{nameof(Project)}";
 
@@ -35,6 +32,8 @@ namespace AzureDevops.ViewModels.Pipelines
             {
                 Project = parameters[projectKey] as Project;
             }
+
+            return Task.CompletedTask;
         }
     }
 }

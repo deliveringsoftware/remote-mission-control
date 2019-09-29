@@ -36,7 +36,7 @@ namespace AzureDevops.Droid
             UserDialogs.Init(this);
 
             LoadApplication(new App());
-            this.ConfigureAndroidSpecific();
+            ConfigureAndroidSpecific();
         }
 
         public override void OnRequestPermissionsResult(int requestCode,

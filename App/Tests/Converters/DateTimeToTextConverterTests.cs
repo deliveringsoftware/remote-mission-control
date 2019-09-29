@@ -10,7 +10,7 @@ namespace AzureDevops.Tests.Converters
         public void DateTimeToTextConverterArgumentNullException()
         {
             var converter = new DateTimeToTextConverter();
-            Assert.Throws<ArgumentNullException>(() => converter.Convert(null, null, null, null));
+            Assert.Null(converter.Convert(null, null, null, null));
         }
 
         [Fact]

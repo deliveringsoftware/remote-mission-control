@@ -22,9 +22,9 @@ namespace AzureDevops.ViewModels
             , IAzureDevopsClientService azureDevopsClientService)
             : base(navigationService, pageDialogService, dialogService, trackService)
         {
-            this.azureDevopsClientService = azureDevopsClientService;
-
             Title = Constants.LABEL_PROJECTS;
+
+            this.azureDevopsClientService = azureDevopsClientService;
 
             LoadProjectFeaturesCommand = new DelegateCommand<Project>(async (project) => await LoadProjectFeatures(project))
                 .ObservesCanExecute(() => IsNotBusy);
@@ -53,6 +53,8 @@ namespace AzureDevops.ViewModels
 
         public override async Task InitializeAsync(INavigationParameters parameters)
         {
+            trackService.Event("ProjectsPageViewModel.InitializeAsync");
+
             await ExecuteTask(async () =>
             {
                 var result = await azureDevopsClientService.Client.Projects.ListAll();
@@ -62,7 +64,7 @@ namespace AzureDevops.ViewModels
 
                 var projects = result.Data.Value.OrderBy(p => p.Name);
                 Projects = new ObservableCollection<Project>(projects);
-            }, Constants.LABEL_LOADING, "ProjectsPageViewModel.InitializeAsync");
+            });
         }
     }
 }

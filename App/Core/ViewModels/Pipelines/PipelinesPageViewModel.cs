@@ -43,7 +43,7 @@ namespace AzureDevops.ViewModels.Pipelines
         public Definition Definition
         {
             get => definition;
-            set => this.SetProperty(ref definition, value);
+            set => SetProperty(ref definition, value);
         }
 
         private Project project;
@@ -51,7 +51,7 @@ namespace AzureDevops.ViewModels.Pipelines
         public Project Project
         {
             get => project;
-            set => this.SetProperty(ref project, value);
+            set => SetProperty(ref project, value);
         }
 
         private ObservableCollection<Definition> definitions = new ObservableCollection<Definition>();
@@ -59,7 +59,7 @@ namespace AzureDevops.ViewModels.Pipelines
         public ObservableCollection<Definition> Definitions
         {
             get => definitions;
-            set => this.SetProperty(ref definitions, value);
+            set => SetProperty(ref definitions, value);
         }
 
         private ObservableCollection<Build> builds = new ObservableCollection<Build>();
@@ -67,7 +67,7 @@ namespace AzureDevops.ViewModels.Pipelines
         public ObservableCollection<Build> Builds
         {
             get => builds;
-            set => this.SetProperty(ref builds, value);
+            set => SetProperty(ref builds, value);
         }
 
         public ICommand RefreshBuildsCommand { get; }
@@ -78,22 +78,26 @@ namespace AzureDevops.ViewModels.Pipelines
         {
             var projectKey = $"{nameof(Project)}";
 
+            trackService.Event("PipelinesViewModel.InitializeAsync");
+
             if (parameters.ContainsKey(projectKey))
             {
                 Project = parameters[projectKey] as Project;
 
-                await ExecuteTask(async () =>
-                {
-                    await LoadDefinitions();
-                }, "Loading", "PipelinesViewModel.InitializeAsync");
+                await ExecuteTask(async () => await LoadDefinitions());
             }
         }
 
         private async Task RefreshBuilds()
-            => await ExecuteTask(async () => await LoadBuilds(), "Loading", "PipelinesViewModel.RefreshBuilds");
+        {
+            trackService.Event("PipelinesViewModel.RefreshBuilds");
+            await ExecuteTask(async () => await LoadBuilds());
+        }
 
         private async Task QueueBuild()
         {
+            trackService.Event("PipelinesViewModel.QueueBuil");
+
             await ExecuteTask(async () =>
             {
                 var result = await azureDevopsClientService.Client.Builds.Queue(Definition);
@@ -101,7 +105,7 @@ namespace AzureDevops.ViewModels.Pipelines
                     dialogService.ShowToast($"Error... {result.ErrorDescription}");
                 else
                     Builds.Insert(0, result.Data);
-            }, "Loading", "PipelinesViewModel.QueueBuild");
+            });
         }
 
         private async Task LoadDefinitions()

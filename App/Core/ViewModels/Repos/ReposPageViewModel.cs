@@ -25,7 +25,7 @@ namespace AzureDevops.ViewModels.Repos
             set => SetProperty(ref project, value);
         }
 
-        public override async Task InitializeAsync(INavigationParameters parameters)
+        public override Task InitializeAsync(INavigationParameters parameters)
         {
             var projectKey = $"{nameof(Project)}";
 
@@ -33,6 +33,8 @@ namespace AzureDevops.ViewModels.Repos
             {
                 Project = parameters[projectKey] as Project;
             }
+
+            return Task.CompletedTask;
         }
     }
 }

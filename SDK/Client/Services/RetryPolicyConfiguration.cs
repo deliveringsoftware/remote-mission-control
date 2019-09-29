@@ -9,8 +9,8 @@
 
         public RetryPolicyConfiguration(int retryCount, int retryAttemptFactor)
         {
-            this.RetryCount = retryCount;
-            this.RetryAttemptFactor = retryAttemptFactor;
+            RetryCount = retryCount;
+            RetryAttemptFactor = retryAttemptFactor;
         }
     }
 }

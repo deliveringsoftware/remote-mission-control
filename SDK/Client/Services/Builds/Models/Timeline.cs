@@ -19,12 +19,12 @@ namespace AzureDevops.Client.Services.Builds.Models
         public Guid? ParentId { get; set; }
         public string Type { get; set; }
         public string Name { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime FinishTime { get; set; }
-        public TimeSpan Duration => this.FinishTime - this.StartTime;
+        public DateTime? StartTime { get; set; }
+        public DateTime? FinishTime { get; set; }
+        public TimeSpan? Duration => FinishTime - StartTime;
         public int? PercentComplete { get; set; }
         public TimelineRecordState State { get; set; }
-        public TaskResult Result { get; set; }
+        public TaskResult? Result { get; set; }
         public int ChangeId { get; set; }
         public DateTime LastModified { get; set; }
         public string WorkerName { get; set; }

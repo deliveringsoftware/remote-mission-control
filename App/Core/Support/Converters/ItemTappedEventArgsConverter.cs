@@ -8,6 +8,8 @@ namespace AzureDevops.Support.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value is null) return value;
+
             if (!(value is ItemTappedEventArgs itemTappedEventArgs))
             {
                 throw new ArgumentException("Expected value to be of type ItemTappedEventArgs", nameof(value));

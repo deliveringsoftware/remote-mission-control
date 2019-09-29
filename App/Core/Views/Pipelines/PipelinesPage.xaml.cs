@@ -6,7 +6,7 @@ namespace AzureDevops.Views
     {
         public PipelinesPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace AzureDevops.Client.Services.Projects
         public async Task<Result<Items<Project>>> ListAll()
         {
             var url = "_apis/projects?api-version=5.1";
-            return await this.Get<Items<Project>>(url);
+            return await Get<Items<Project>>(url);
         }
     }
 }

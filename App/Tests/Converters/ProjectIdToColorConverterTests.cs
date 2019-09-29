@@ -10,7 +10,7 @@ namespace AzureDevops.Tests.Converters
         public void ProjectIdToColorConverterArgumentNullException()
         {
             var converter = new ProjectIdToColorConverter();
-            Assert.Throws<ArgumentNullException>(() => converter.Convert(null, null, null, null));
+            Assert.Null(converter.Convert(null, null, null, null));
         }
 
         [Fact]

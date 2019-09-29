@@ -21,7 +21,7 @@ namespace AzureDevops.Services
                                CancelText = cancelText
                            });
 
-        public void ShowToast(string message, int duration = 2000)
+        public void ShowToast(string message, int duration = 3000)
             => UserDialogs.Instance
                           .Toast(message, new TimeSpan(0, 0, 0, 0, duration));
 

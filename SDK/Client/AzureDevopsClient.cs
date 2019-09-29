@@ -11,49 +11,49 @@ namespace AzureDevops.Client
 {
     internal class AzureDevopsClient : IAzureDevopsClient
     {
-        private IProjects _projects;
+        private IProjects projects;
 
         public IProjects Projects
         {
             get
             {
-                if (this._projects == null)
-                    this._projects = new Projects(this._httpClient, this._asyncRetryPolicy);
-                return this._projects;
+                if (projects is null)
+                    projects = new Projects(httpClient, asyncRetryPolicy);
+                return projects;
             }
         }
 
-        private IBuilds _builds;
+        private IBuilds builds;
 
         public IBuilds Builds
         {
             get
             {
-                if (this._builds == null)
-                    this._builds = new Builds(this._httpClient, this._asyncRetryPolicy);
-                return this._builds;
+                if (builds is null)
+                    builds = new Builds(httpClient, asyncRetryPolicy);
+                return builds;
             }
         }
 
-        private IDefinitions _definitions;
+        private IDefinitions definitions;
 
         public IDefinitions Definitions
         {
             get
             {
-                if (this._definitions == null)
-                    this._definitions = new Definitions(this._httpClient, this._asyncRetryPolicy);
-                return this._definitions;
+                if (definitions is null)
+                    definitions = new Definitions(httpClient, asyncRetryPolicy);
+                return definitions;
             }
         }
 
-        private readonly HttpClient _httpClient;
-        private readonly AsyncRetryPolicy _asyncRetryPolicy;
+        private readonly HttpClient httpClient;
+        private readonly AsyncRetryPolicy asyncRetryPolicy;
 
         public AzureDevopsClient(HttpClient httpClient, RetryPolicyConfiguration retryPolicyConfiguration)
         {
-            this._httpClient = httpClient;
-            this._asyncRetryPolicy = this.CreatePolicy(retryPolicyConfiguration);
+            this.httpClient = httpClient;
+            asyncRetryPolicy = CreatePolicy(retryPolicyConfiguration);
         }
 
         private AsyncRetryPolicy CreatePolicy(RetryPolicyConfiguration retryPolicyConfiguration)

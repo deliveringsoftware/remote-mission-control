@@ -60,17 +60,16 @@ namespace AzureDevops.ViewModels.Pipelines
             var projectKey = $"{nameof(Project)}";
             var buildKey = $"{nameof(Build)}";
 
+            trackService.Event("BuildDetailsPageViewModel.InitializeAsync");
+
             if (parameters.ContainsKey(projectKey) && parameters.ContainsKey(buildKey))
             {
                 Project = parameters[projectKey] as Project;
                 Build = parameters[buildKey] as Build;
 
-                Title = $"{Constants.DYNAMIC_LABE_BUILD} {Build.BuildNumber}";
+                Title = string.Format(Constants.LABEL_BUILD_VERSION, Build.BuildNumber);
 
-                await ExecuteTask(async () =>
-                {
-                    await LoadTimeline();
-                }, Constants.LABEL_LOADING, "BuildDetailsPageViewModel.InitializeAsync");
+                await ExecuteTask(async () => await LoadTimeline());
             }
         }
 
@@ -82,13 +81,15 @@ namespace AzureDevops.ViewModels.Pipelines
                 dialogService.ShowToast($"Error... {result.ErrorDescription}");
 
             //TODO  we should display a message?
-            if (result.Data == null) return;
+            if (result.Data is null) return;
 
             Jobs = new ObservableCollection<Job>(Job.CreateJobs(result.Data.Records));
         }
 
         private async Task ShowLogs(Job job)
         {
+            trackService.Event("BuildDetailsPageViewModel.ShowLogs");
+
             if (job.LogId.HasValue)
             {
                 await ExecuteTask(async () =>
@@ -104,7 +105,7 @@ namespace AzureDevops.ViewModels.Pipelines
                     };
 
                     await navigationService.NavigateAsync($"{nameof(BuildLogPage)}", navigationParameters, true);
-                }, Constants.LABEL_LOADING, "BuildDetailsPageViewModel.ShowLogs");
+                });
             }
         }
     }

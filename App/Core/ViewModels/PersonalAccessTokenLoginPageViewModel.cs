@@ -14,10 +14,8 @@ namespace AzureDevops.ViewModels
     {
         private readonly IAzureDevopsClientService azureDevopsClientService;
 
-        private string _organization;
-        private string _personalAccessToken;
-
-        public PersonalAccessTokenLoginPageViewModel(INavigationService navigationService
+        public PersonalAccessTokenLoginPageViewModel(
+              INavigationService navigationService
             , IPageDialogService pageDialogService
             , IDialogService dialogService
             , ITrackService trackService
@@ -27,43 +25,62 @@ namespace AzureDevops.ViewModels
             Title = Constants.LABEL_LOGIN;
 
             LoginCommand = new DelegateCommand(async () => await Login())
-                .ObservesCanExecute(() => IsNotBusy);
+                .ObservesProperty(() => IsNotBusy)
+                .ObservesProperty(() => Organization)
+                .ObservesProperty(() => PersonalAccessToken)
+                .ObservesCanExecute(() => CanExecuteLogin);
 
-            OpenUrlCommand = new DelegateCommand(async () => await OpenUrl())
-                .ObservesCanExecute(() => IsNotBusy);
+            OpenUrlCommand = new DelegateCommand(async () => await OpenUrl(), () => IsNotBusy);
+
             this.azureDevopsClientService = azureDevopsClientService;
+
+            organization = "angelobelchior";
+            personalAccessToken = "qc75xfjynpdufqa53vafrkelvrbnhdsqcta77v4rkpwnuviszeuq";
         }
+
+        private string organization;
 
         public string Organization
         {
-            get => this._organization;
-            set => this.SetProperty(ref this._organization, value);
+            get => organization;
+            set => SetProperty(ref organization, value);
         }
+
+        private string personalAccessToken;
 
         public string PersonalAccessToken
         {
-            get => this._personalAccessToken;
-            set => this.SetProperty(ref this._personalAccessToken, value);
+            get => personalAccessToken;
+            set => SetProperty(ref personalAccessToken, value);
         }
+
+        private bool CanExecuteLogin
+            => IsNotBusy &&
+               !string.IsNullOrEmpty(Organization) &&
+               !string.IsNullOrEmpty(PersonalAccessToken);
 
         public ICommand LoginCommand { get; }
         public ICommand OpenUrlCommand { get; }
 
         private async Task Login()
         {
+            trackService.Event("PersonalAccessTokenLoginViewModel.Login");
+
             await ExecuteTask(async () =>
             {
-                azureDevopsClientService.RegisterAzureDevopsClient(this.Organization, this.PersonalAccessToken);
+                azureDevopsClientService.RegisterAzureDevopsClient(Organization, PersonalAccessToken);
 
                 var result = await azureDevopsClientService.Client.Projects.ListAll();
 
-                if (result.HasError)
-                    dialogService.ShowToast($"Error... {result.ErrorDescription}");
-                else
+                if (!result.HasError)
                 {
                     await NavigateToProjectsPage();
                 }
-            }, Constants.LABEL_LOADING, "PersonalAccessTokenLoginViewModel.Login");
+                else
+                {
+                    dialogService.ShowToast(Constants.ERROR_MSG_PAT_UNABLE_TO_CONNECT_TO_AZURE_DEVOPS);
+                }
+            });
         }
 
         private Task NavigateToProjectsPage()
@@ -71,10 +88,5 @@ namespace AzureDevops.ViewModels
 
         private Task OpenUrl()
             => Browser.OpenAsync(new Uri(Constants.URL_PERSONAL_ACCESS_TOKEN), BrowserLaunchMode.SystemPreferred);
-
-        private bool CanExecuteLogin()
-            => !string.IsNullOrEmpty(Organization) &&
-               IsNotBusy &&
-               !string.IsNullOrEmpty(PersonalAccessToken);
     }
 }

@@ -3,7 +3,6 @@ using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AzureDevops.ViewModels
@@ -14,8 +13,6 @@ namespace AzureDevops.ViewModels
         protected readonly IPageDialogService pageDialogService;
         protected readonly IDialogService dialogService;
         protected readonly ITrackService trackService;
-
-        private bool isLoaded;
 
         protected BaseViewModel(INavigationService navigationService
            , IPageDialogService pageDialogService
@@ -38,7 +35,7 @@ namespace AzureDevops.ViewModels
 
         public bool IsNotBusy => !IsBusy;
 
-        private string title = string.Empty;
+        private string title;
 
         public string Title
         {
@@ -46,31 +43,9 @@ namespace AzureDevops.ViewModels
             set { SetProperty(ref title, value); }
         }
 
-        public async Task Loading()
+        protected async Task ExecuteTask(Func<Task> task)
         {
-            if (isLoaded) return;
-            isLoaded = true;
-            await this.OnLoading();
-        }
-
-        public async Task Unloading()
-        {
-            if (isLoaded)
-                await this.OnUnloading();
-        }
-
-        protected virtual Task OnLoading() => Task.CompletedTask;
-
-        protected virtual Task OnUnloading() => Task.CompletedTask;
-
-        protected async Task ExecuteTask(Func<Task> task,
-                                         string text = "Loading",
-                                         string eventName = "",
-                                         IDictionary<string, string> properties = null)
-        {
-            await Task.CompletedTask;
-
-            await dialogService.ShowLoading(text, async () =>
+            await dialogService.ShowLoading(Constants.LABEL_LOADING, async () =>
             {
                 try
                 {
@@ -78,9 +53,6 @@ namespace AzureDevops.ViewModels
                         return;
 
                     IsBusy = true;
-
-                    if (!string.IsNullOrEmpty(eventName))
-                        trackService.Event(eventName, properties);
 
                     await task();
                 }
