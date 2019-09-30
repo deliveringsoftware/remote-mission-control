@@ -1,7 +1,7 @@
-﻿using System;
+﻿using AzureDevops.Support.ExtentionMethods;
+using System;
 using System.Globalization;
 using Xamarin.Forms;
-using AzureDevops.Support.ExtentionMethods;
 
 namespace AzureDevops.Support.Converters
 {
@@ -9,8 +9,7 @@ namespace AzureDevops.Support.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
+            if (value is null) return value;
 
             if (value is string name && !string.IsNullOrEmpty(name))
                 return name.Abbreviate();

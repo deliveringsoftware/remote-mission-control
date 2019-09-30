@@ -11,10 +11,10 @@ namespace AzureDevops.Client.Services.Builds.Models
         public string BuildNumber { get; set; }
         public Status Status { get; set; }
         public Result Result { get; set; }
-        public DateTime QueueTime { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime FinishTime { get; set; }
-        public TimeSpan Duration => this.FinishTime - this.StartTime;
+        public DateTime? QueueTime { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? FinishTime { get; set; }
+        public TimeSpan? Duration => FinishTime - StartTime;
         public string Url { get; set; }
         public Definition Definition { get; set; }
         public int BuildNumberRevision { get; set; }
@@ -33,15 +33,15 @@ namespace AzureDevops.Client.Services.Builds.Models
         public bool KeepForever { get; set; }
         public bool RetainedByRelease { get; set; }
         public object TriggeredByBuild { get; set; }
-        public string BuildSourceInfo => this.CreateBuildSourceInfo();
+        public string BuildSourceInfo => CreateBuildSourceInfo();
 
         private string CreateBuildSourceInfo()
         {
-            var parts = this.SourceBranch.Split('/');
+            var parts = SourceBranch.Split('/');
             var branchName = parts.Last();
             var versionShort = String.Empty;
-            if (!string.IsNullOrEmpty(this.SourceVersion))
-                versionShort = this.SourceVersion.Substring(0, 7);
+            if (!string.IsNullOrEmpty(SourceVersion))
+                versionShort = SourceVersion.Substring(0, 7);
             return $"{branchName} {versionShort}";
         }
     }

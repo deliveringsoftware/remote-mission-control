@@ -1,5 +1,4 @@
-﻿using AzureDevops.Client.Services.Projects.Models;
-using AzureDevops.Services;
+﻿using AzureDevops.Services;
 using AzureDevops.Views;
 using Prism.Commands;
 using Prism.Navigation;
@@ -10,19 +9,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace AzureDevops.ViewModels
 {
     public class PersonalAccessTokenLoginPageViewModel : BaseViewModel
     {
-
         private readonly IAzureDevopsClientService azureDevopsClientService;
 
-        private string _organization;
-        private string _personalAccessToken;
-
-        public PersonalAccessTokenLoginPageViewModel(INavigationService navigationService
+        public PersonalAccessTokenLoginPageViewModel(
+              INavigationService navigationService
             , IPageDialogService pageDialogService
             , IDialogService dialogService
             , ITrackService trackService
@@ -32,56 +27,72 @@ namespace AzureDevops.ViewModels
             Title = Constants.LABEL_LOGIN;
 
             LoginCommand = new DelegateCommand(async () => await Login())
-                .ObservesCanExecute(() => IsNotBusy);
+                .ObservesProperty(() => IsNotBusy)
+                .ObservesProperty(() => Organization)
+                .ObservesProperty(() => PersonalAccessToken)
+                .ObservesCanExecute(() => CanExecuteLogin);
 
-            OpenUrlCommand = new DelegateCommand(async () => await OpenUrl())
-                .ObservesCanExecute(() => IsNotBusy);
+            OpenUrlCommand = new DelegateCommand(async () => await OpenUrl(), () => IsNotBusy);
+
             this.azureDevopsClientService = azureDevopsClientService;
         }
 
+        private string organization;
+
         public string Organization
         {
-            get => this._organization;
-            set => this.SetProperty(ref this._organization, value);
+            get => organization;
+            set => SetProperty(ref organization, value);
         }
+
+        private string personalAccessToken;
 
         public string PersonalAccessToken
         {
-            get => this._personalAccessToken;
-            set => this.SetProperty(ref this._personalAccessToken, value);
+            get => personalAccessToken;
+            set => SetProperty(ref personalAccessToken, value);
         }
+
+        private bool CanExecuteLogin
+            => IsNotBusy &&
+               !string.IsNullOrEmpty(Organization) &&
+               !string.IsNullOrEmpty(PersonalAccessToken);
 
         public ICommand LoginCommand { get; }
         public ICommand OpenUrlCommand { get; }
 
-
         private async Task Login()
         {
+            trackService.Event("PersonalAccessTokenLoginViewModel.Login");
+
             await ExecuteTask(async () =>
             {
-                azureDevopsClientService.RegisterAzureDevopsClient(this.Organization, this.PersonalAccessToken);
+                azureDevopsClientService.RegisterAzureDevopsClient(Organization, PersonalAccessToken);
 
                 var result = await azureDevopsClientService.Client.Projects.ListAll();
 
-                if (result.HasError)
-                    dialogService.ShowToast($"Error... {result.ErrorDescription}");
+                if (!result.HasError)
+                {
+                    await NavigateToProjectsPage(result.Data.Value.OrderByDescending(p => p.LastUpdateTime));
+                }
                 else
                 {
-                    await NavigateToProjectsPage();
+                    dialogService.ShowToast(Constants.ERROR_MSG_PAT_UNABLE_TO_CONNECT_TO_AZURE_DEVOPS);
                 }
-
-            }, Constants.LABEL_LOADING, "PersonalAccessTokenLoginViewModel.Login");
+            });
         }
 
-        private Task NavigateToProjectsPage()
-            => navigationService.NavigateAsync($"../{nameof(ProjectsPage)}");
+        private async Task NavigateToProjectsPage(IEnumerable<Client.Services.Projects.Models.Project> projects)
+        {
+            var navigationParameters = new NavigationParameters
+            {
+                { "Projects", projects }
+            };
+
+            await navigationService.NavigateAsync($"../{nameof(ProjectsPage)}", navigationParameters);
+        }
 
         private Task OpenUrl()
             => Browser.OpenAsync(new Uri(Constants.URL_PERSONAL_ACCESS_TOKEN), BrowserLaunchMode.SystemPreferred);
-
-        private bool CanExecuteLogin()
-            => !string.IsNullOrEmpty(Organization) &&
-               IsNotBusy &&
-               !string.IsNullOrEmpty(PersonalAccessToken);
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using AzureDevops.Services;
+﻿using AzureDevops.Services;
 using AzureDevops.ViewModels;
 using AzureDevops.ViewModels.Board;
 using AzureDevops.ViewModels.Pipelines;
@@ -12,6 +10,7 @@ using Microsoft.AppCenter.Crashes;
 using Prism;
 using Prism.DryIoc;
 using Prism.Ioc;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace AzureDevops
@@ -75,7 +74,6 @@ namespace AzureDevops
             containerRegistry.RegisterForNavigation<BuildDetailsPage, BuildDetailsPageViewModel>();
             containerRegistry.RegisterForNavigation<PipelinesPage, PipelinesPageViewModel>();
             containerRegistry.RegisterForNavigation<TestPage, TestPageViewModel>();
-
         }
 
         private void RegisterAppCenter()

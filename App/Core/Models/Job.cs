@@ -10,21 +10,21 @@ namespace AzureDevops.Models
         public Guid Id { get; set; }
         public int Depth { get; set; }
         public string Name { get; set; }
-        public TimeSpan Duration { get; set; }
+        public TimeSpan? Duration { get; set; }
         public int Order { get; set; }
-        public TaskResult Result { get; set; }
+        public TaskResult? Result { get; set; }
         public int? LogId { get; set; }
 
         public Job(TimelineRecord record, int depth)
         {
-            this.Depth = depth;
+            Depth = depth;
 
-            this.Id = record.Id;
-            this.Name = record.Name;
-            this.Duration = record.Duration;
-            this.Order = record.Order;
-            this.Result = record.Result;
-            this.LogId = record.Log?.Id;
+            Id = record.Id;
+            Name = record.Name;
+            Duration = record.Duration;
+            Order = record.Order;
+            Result = record.Result;
+            LogId = record.Log?.Id;
         }
 
         public static IList<Job> CreateJobs(IEnumerable<TimelineRecord> records)

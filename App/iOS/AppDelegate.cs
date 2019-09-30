@@ -1,5 +1,4 @@
-﻿using Acr.UserDialogs;
-using Foundation;
+﻿using Foundation;
 using UIKit;
 using Xamarin.Forms;
 

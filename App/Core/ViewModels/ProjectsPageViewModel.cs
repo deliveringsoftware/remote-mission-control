@@ -4,8 +4,8 @@ using AzureDevops.Views;
 using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -13,17 +13,12 @@ namespace AzureDevops.ViewModels
 {
     public class ProjectsPageViewModel : BaseViewModel
     {
-        private readonly IAzureDevopsClientService azureDevopsClientService;
-
         public ProjectsPageViewModel(INavigationService navigationService
             , IPageDialogService pageDialogService
             , IDialogService dialogService
-            , ITrackService trackService
-            , IAzureDevopsClientService azureDevopsClientService)
+            , ITrackService trackService)
             : base(navigationService, pageDialogService, dialogService, trackService)
         {
-            this.azureDevopsClientService = azureDevopsClientService;
-
             Title = Constants.LABEL_PROJECTS;
 
             LoadProjectFeaturesCommand = new DelegateCommand<Project>(async (project) => await LoadProjectFeatures(project))
@@ -41,8 +36,8 @@ namespace AzureDevops.ViewModels
                 navigationParameters);
         }
 
-
         private ObservableCollection<Project> projects = new ObservableCollection<Project>();
+
         public ObservableCollection<Project> Projects
         {
             get => projects;
@@ -51,20 +46,23 @@ namespace AzureDevops.ViewModels
 
         public ICommand LoadProjectFeaturesCommand { get; }
 
-
-        public override async Task InitializeAsync(INavigationParameters parameters)
+        public override Task InitializeAsync(INavigationParameters parameters)
         {
-            await ExecuteTask(async () =>
+            trackService.Event("ProjectsPageViewModel.InitializeAsync");
+
+            var projectsKey = "Projects";
+
+            if (parameters.ContainsKey(projectsKey))
             {
-                var result = await azureDevopsClientService.Client.Projects.ListAll();
+                var projects = parameters[projectsKey] as IEnumerable<Project>;
 
-                if (result.HasError)
-                    dialogService.ShowToast($"Error... {result.ErrorDescription}");
+                if (projects != null)
+                {
+                    Projects = new ObservableCollection<Project>(projects);
+                }
+            }
 
-                var projects = result.Data.Value.OrderBy(p => p.Name);
-                Projects = new ObservableCollection<Project>(projects);
-
-            }, Constants.LABEL_LOADING, "ProjectsPageViewModel.InitializeAsync");
+            return Task.CompletedTask;
         }
     }
 }

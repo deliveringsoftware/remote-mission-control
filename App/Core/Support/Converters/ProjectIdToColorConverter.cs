@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Xamarin.Forms;
 
 namespace AzureDevops.Support.Converters
@@ -10,8 +9,7 @@ namespace AzureDevops.Support.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
+            if (value is null) return value;
 
             var colors = new string[]
             {
@@ -29,7 +27,7 @@ namespace AzureDevops.Support.Converters
 
             if (value is Guid id)
             {
-                var index = this.GetIndexFromGuid(id);
+                var index = GetIndexFromGuid(id);
                 return colors[index];
             }
             else

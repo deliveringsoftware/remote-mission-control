@@ -1,12 +1,12 @@
-﻿using Android.App;
+﻿using Acr.UserDialogs;
+using Android.App;
 using Android.Content.PM;
-using Android.Runtime;
 using Android.OS;
-using Xamarin.Forms;
-using Xamarin.Essentials;
-using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
+using Android.Runtime;
 using Plugin.CurrentActivity;
-using Acr.UserDialogs;
+using Xamarin.Essentials;
+using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 
 namespace AzureDevops.Droid
 {
@@ -36,8 +36,9 @@ namespace AzureDevops.Droid
             UserDialogs.Init(this);
 
             LoadApplication(new App());
-            this.ConfigureAndroidSpecific();
+            ConfigureAndroidSpecific();
         }
+
         public override void OnRequestPermissionsResult(int requestCode,
                                                         string[] permissions,
                                                         [GeneratedEnum] Permission[] grantResults)

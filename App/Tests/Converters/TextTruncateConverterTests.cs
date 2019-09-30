@@ -1,6 +1,6 @@
-﻿using System;
+﻿using AzureDevops.Support.Converters;
+using System;
 using Xunit;
-using AzureDevops.Support.Converters;
 
 namespace AzureDevops.Tests.Converters
 {
@@ -17,7 +17,7 @@ namespace AzureDevops.Tests.Converters
         public void TimeSpanToTextConverterArgumentNullException()
         {
             var converter = new TextTruncateConverter();
-            Assert.Throws<ArgumentNullException>(() => converter.Convert(null, null, null, null));
+            Assert.Null(converter.Convert(null, null, null, null));
         }
 
         [Fact]

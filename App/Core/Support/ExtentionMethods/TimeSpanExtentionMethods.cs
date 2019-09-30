@@ -11,9 +11,9 @@ namespace AzureDevops.Support.ExtentionMethods
             if (timeSpan.TotalSeconds < 60)
                 return $"{timeSpan.Seconds}s";
             else if (timeSpan.TotalMinutes > 1 && timeSpan.TotalMinutes <= 59)
-                return $"{timeSpan.Minutes}M {timeSpan.Seconds}s";
+                return $"{timeSpan.Minutes}min {timeSpan.Seconds}s";
             else
-                return $"{timeSpan.TotalHours}h {timeSpan.Minutes}m {timeSpan.Seconds}s";
+                return $"{timeSpan.TotalHours}h {timeSpan.Minutes}min {timeSpan.Seconds}s";
         }
     }
 }

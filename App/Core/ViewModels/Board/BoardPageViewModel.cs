@@ -12,7 +12,7 @@ namespace AzureDevops.ViewModels.Board
             , ITrackService trackService) :
             base(navigationService, pageDialogService, dialogService, trackService)
         {
-            this.Title = Constants.LABEL_BOARD;
+            Title = Constants.LABEL_BOARD;
         }
     }
 }

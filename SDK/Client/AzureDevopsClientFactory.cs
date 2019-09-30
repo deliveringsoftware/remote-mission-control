@@ -8,18 +8,18 @@ namespace AzureDevops.Client
 {
     public static class AzureDevopsClientFactory
     {
-        private static IAzureDevopsClient _azureDevopsClient;
+        private static IAzureDevopsClient azureDevopsClient;
 
         public static IAzureDevopsClient CreateUsingPersonalAccessToken(string organization,
                                                                         string personalAccessToken,
                                                                         RetryPolicyConfiguration retryPolicyConfiguration = null)
         {
-            if (_azureDevopsClient == null)
+            if (azureDevopsClient is null)
             {
                 var httpClient = CreateHttpClient(organization, personalAccessToken);
-                _azureDevopsClient = new AzureDevopsClient(httpClient, retryPolicyConfiguration ?? RetryPolicyConfiguration.Default);
+                azureDevopsClient = new AzureDevopsClient(httpClient, retryPolicyConfiguration ?? RetryPolicyConfiguration.Default);
             }
-            return _azureDevopsClient;
+            return azureDevopsClient;
         }
 
         private static HttpClient CreateHttpClient(string organization, string personalAccessToken)

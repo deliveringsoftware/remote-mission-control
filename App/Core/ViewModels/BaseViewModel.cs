@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AzureDevops.Services;
+﻿using AzureDevops.Services;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
+using System;
+using System.Threading.Tasks;
 
 namespace AzureDevops.ViewModels
 {
@@ -15,14 +14,11 @@ namespace AzureDevops.ViewModels
         protected readonly IDialogService dialogService;
         protected readonly ITrackService trackService;
 
-        private bool isLoaded;
-
         protected BaseViewModel(INavigationService navigationService
            , IPageDialogService pageDialogService
            , IDialogService dialogService
            , ITrackService trackService)
         {
-
             this.navigationService = navigationService;
             this.pageDialogService = pageDialogService;
             this.dialogService = dialogService;
@@ -30,6 +26,7 @@ namespace AzureDevops.ViewModels
         }
 
         private bool isBusy;
+
         public bool IsBusy
         {
             get => isBusy;
@@ -38,49 +35,21 @@ namespace AzureDevops.ViewModels
 
         public bool IsNotBusy => !IsBusy;
 
-        private string title = string.Empty;
+        private string title;
+
         public string Title
         {
             get { return title; }
             set { SetProperty(ref title, value); }
         }
 
-
-        public async Task Loading()
+        protected async Task ExecuteTask(Func<Task> task)
         {
-            if (isLoaded) return;
-            isLoaded = true;
-            await this.OnLoading();
-        }
-
-        public async Task Unloading()
-        {
-            if (isLoaded)
-                await this.OnUnloading();
-        }
-
-        protected virtual Task OnLoading() => Task.CompletedTask;
-        protected virtual Task OnUnloading() => Task.CompletedTask;
-
-        protected async Task ExecuteTask(Func<Task> task,
-                                         string text = "Loading",
-                                         string eventName = "",
-                                         IDictionary<string, string> properties = null)
-        {
-
-            await Task.CompletedTask;
-
-            await dialogService.ShowLoading(text, async () =>
+            await dialogService.ShowLoading(Constants.LABEL_LOADING, async () =>
             {
                 try
                 {
-                    if (isBusy)
-                        return;
-
                     IsBusy = true;
-
-                    if (!string.IsNullOrEmpty(eventName))
-                        trackService.Event(eventName, properties);
 
                     await task();
                 }
@@ -100,6 +69,5 @@ namespace AzureDevops.ViewModels
 
         public virtual Task InitializeAsync(INavigationParameters parameters)
             => Task.CompletedTask;
-
     }
 }

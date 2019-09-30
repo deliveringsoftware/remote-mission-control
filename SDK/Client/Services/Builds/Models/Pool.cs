@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace AzureDevops.Client.Services.Builds.Models
+﻿namespace AzureDevops.Client.Services.Builds.Models
 {
     public class Pool
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AzureDevops.Support.Fonts
+﻿namespace AzureDevops.Support.Fonts
 {
     /// <summary>
     /// The unicode values for all FontAwesome icons.

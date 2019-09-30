@@ -1,5 +1,4 @@
-﻿using AzureDevops.ViewModels.Pipelines;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace AzureDevops.Views
 {
@@ -7,7 +6,7 @@ namespace AzureDevops.Views
     {
         public PipelinesPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using AzureDevops.Client.Services.Projects.Models;
+﻿using AzureDevops.Client.Services.Projects.Models;
 using AzureDevops.Services;
 using Prism.Navigation;
 using Prism.Services;
+using System.Threading.Tasks;
 
 namespace AzureDevops.ViewModels.Repos
 {
@@ -18,13 +18,14 @@ namespace AzureDevops.ViewModels.Repos
         }
 
         private Project project;
+
         public Project Project
         {
             get => project;
             set => SetProperty(ref project, value);
         }
 
-        public override async Task InitializeAsync(INavigationParameters parameters)
+        public override Task InitializeAsync(INavigationParameters parameters)
         {
             var projectKey = $"{nameof(Project)}";
 
@@ -32,6 +33,8 @@ namespace AzureDevops.ViewModels.Repos
             {
                 Project = parameters[projectKey] as Project;
             }
+
+            return Task.CompletedTask;
         }
     }
 }

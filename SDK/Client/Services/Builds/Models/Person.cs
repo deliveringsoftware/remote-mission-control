@@ -6,8 +6,10 @@ namespace AzureDevops.Client.Services.Builds.Models
     {
         public string DisplayName { get; set; }
         public string Url { get; set; }
+
         [JsonProperty("_links")]
         public Links Links { get; set; }
+
         public string Id { get; set; }
         public string UniqueName { get; set; }
         public string ImageUrl { get; set; }

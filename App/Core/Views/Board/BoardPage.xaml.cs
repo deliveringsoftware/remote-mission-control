@@ -6,7 +6,7 @@ namespace AzureDevops.Views
     {
         public BoardPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

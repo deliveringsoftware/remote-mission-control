@@ -1,9 +1,7 @@
-﻿using System;
-using Xunit;
+﻿using AzureDevops.Client.Services.Projects.Models;
 using AzureDevops.Support.Converters;
-using AzureDevops.Client.Services.Builds.Models;
-using Xamarin.Forms;
-using AzureDevops.Client.Services.Projects.Models;
+using System;
+using Xunit;
 
 namespace AzureDevops.Tests.Converters
 {
@@ -13,7 +11,7 @@ namespace AzureDevops.Tests.Converters
         public void ProjectVisibilityToIconConverterArgumentNullException()
         {
             var converter = new StatusToColorConverter();
-            Assert.Throws<ArgumentNullException>(() => converter.Convert(null, null, null, null));
+            Assert.Null(converter.Convert(null, null, null, null));
         }
 
         [Fact]

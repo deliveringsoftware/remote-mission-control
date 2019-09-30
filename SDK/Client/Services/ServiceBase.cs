@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Polly.Retry;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -11,31 +10,32 @@ namespace AzureDevops.Client.Services
     {
         private readonly HttpClient _httpClient;
         private readonly AsyncRetryPolicy _asyncRetryPolicy;
+
         public ServiceBase(HttpClient httpClient, AsyncRetryPolicy asyncRetryPolicy)
         {
-            this._httpClient = httpClient;
-            this._asyncRetryPolicy = asyncRetryPolicy;
+            _httpClient = httpClient;
+            _asyncRetryPolicy = asyncRetryPolicy;
         }
 
         protected async Task<Result<T>> Get<T>(string url)
         {
-            return await this._asyncRetryPolicy.ExecuteAsync(async () =>
+            return await _asyncRetryPolicy.ExecuteAsync(async () =>
             {
-                var response = await this._httpClient.GetAsync(url);
-                return await this.GetRequestContent<T>(response);
+                var response = await _httpClient.GetAsync(url);
+                return await GetRequestContent<T>(response);
             });
         }
 
         protected async Task<Result<T>> Post<T>(string url, object request)
-            => await this.Post<T, object>(url, request);
+            => await Post<T, object>(url, request);
 
         protected async Task<Result<T>> Post<T, R>(string url, R request)
         {
-            return await this._asyncRetryPolicy.ExecuteAsync(async () =>
+            return await _asyncRetryPolicy.ExecuteAsync(async () =>
             {
-                var content = this.GetHttpContent<R>(request);
-                var response = await this._httpClient.PostAsync(url, content);
-                return await this.GetRequestContent<T>(response);
+                var content = GetHttpContent<R>(request);
+                var response = await _httpClient.PostAsync(url, content);
+                return await GetRequestContent<T>(response);
             });
         }
 
@@ -43,15 +43,22 @@ namespace AzureDevops.Client.Services
         {
             if (!response.IsSuccessStatusCode)
             {
-                if (response.StatusCode == HttpStatusCode.NotFound || response.StatusCode == HttpStatusCode.Forbidden)
-                    return new Result<T>(true, response.StatusCode.ToString());
-                else
-                    response.EnsureSuccessStatusCode();
+                return new Result<T>(true, response.StatusCode.ToString());
             }
 
-            var json = await response.Content.ReadAsStringAsync();
-            var data = JsonConvert.DeserializeObject<T>(json);
-            return new Result<T>(data);
+            try
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<T>(json);
+                return new Result<T>(data);
+            }
+            catch (System.Exception ex)
+            {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine(ex);
+#endif
+                return new Result<T>(true, ex.Message);
+            }
         }
 
         private HttpContent GetHttpContent<T>(T content)
