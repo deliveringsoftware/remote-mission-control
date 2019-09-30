@@ -18,9 +18,9 @@ namespace AzureDevops.Tests.ExtentionMethods
         }
 
         [Theory]
-        [InlineData(1, 15, "1M 15s")]
-        [InlineData(1, 01, "1M 1s")]
-        [InlineData(1, 59, "1M 59s")]
+        [InlineData(1, 15, "1min 15s")]
+        [InlineData(1, 01, "1min 1s")]
+        [InlineData(1, 59, "1min 59s")]
         public void TimeSpanToTextMinutes(int minutes, int second, string expected)
         {
             var timeSpan = new TimeSpan(0, 0, minutes, second, 32);

@@ -35,6 +35,7 @@ namespace AzureDevops.ViewModels
             OpenUrlCommand = new DelegateCommand(async () => await OpenUrl(), () => IsNotBusy);
 
             this.azureDevopsClientService = azureDevopsClientService;
+
         }
 
         private string organization;
