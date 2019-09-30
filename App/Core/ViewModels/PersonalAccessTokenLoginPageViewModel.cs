@@ -35,7 +35,6 @@ namespace AzureDevops.ViewModels
             OpenUrlCommand = new DelegateCommand(async () => await OpenUrl(), () => IsNotBusy);
 
             this.azureDevopsClientService = azureDevopsClientService;
-
         }
 
         private string organization;
@@ -85,9 +84,12 @@ namespace AzureDevops.ViewModels
 
         private async Task NavigateToProjectsPage(IEnumerable<Client.Services.Projects.Models.Project> projects)
         {
-            var parameters = new NavigationParameters();
-            parameters.Add("Projects", projects);
-            await navigationService.NavigateAsync($"../{nameof(ProjectsPage)}", parameters);
+            var navigationParameters = new NavigationParameters
+            {
+                { "Projects", projects }
+            };
+
+            await navigationService.NavigateAsync($"../{nameof(ProjectsPage)}", navigationParameters);
         }
 
         private Task OpenUrl()
