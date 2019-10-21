@@ -8,7 +8,22 @@
              mc:Ignorable="d"
              BackgroundColor="{StaticResource Preto}"
              x:Class="AzureDevops.Views.BuildLogPage">
-    <ListView Margin="5"
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="iconSolid" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource Branco}" />
+                <Setter Property="FontSize" Value="Large" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="AbsoluteLayout.LayoutFlags" Value="PositionProportional" />
+                <Setter Property="AbsoluteLayout.LayoutBounds" Value=".95,.03,30,35" />
+                <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <AbsoluteLayout>
+        <ListView Margin="5"
               ItemsSource="{Binding Logs}"
               HasUnevenRows="True"
               RowHeight="15"
@@ -16,14 +31,19 @@
               SeparatorVisibility="None"
               CachingStrategy="RecycleElementAndDataTemplate"
               BackgroundColor="{StaticResource Preto}">
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <ViewCell>
-                    <Label Text="{Binding .}"
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Label Text="{Binding .}"
                            FontSize="Micro"
                            TextColor="{StaticResource Branco}" />
-                </ViewCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Label x:Name="close"
+               Text="&#xf057;"
+               Style="{StaticResource iconSolid}" />
+    </AbsoluteLayout>
 </ContentPage>
